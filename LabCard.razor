@@ -1,0 +1,35 @@
+<div class="card @CardClasses">
+    <div class="card-header">
+        @Title
+    </div>
+    <div class="card-body @CardBodyClasses">
+        @Body
+    </div>
+    @if (Footer != null)
+    {
+        <div class="card-footer @CardFooterClasses">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string CardClasses { get; set; }
+    [Parameter] public string CardBodyClasses { get; set; }
+    [Parameter] public string CardFooterClasses { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public RenderFragment Body { get; set; }
+    [Parameter] public RenderFragment Footer { get; set; }
+}
+
+
+@* Example *@
+
+@* <LabCard Title="My Card Title">
+    <Body>
+        <p>This is the body content of my card.</p>
+    </Body>
+    <Footer>
+        This is the body content of my card
+    </Footer>
+</LabCard> *@

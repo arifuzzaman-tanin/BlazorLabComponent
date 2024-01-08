@@ -1,0 +1,88 @@
+@if (ShowModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="labModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header @HeaderClasses">
+                    <h1 class="modal-title fs-5">@Title</h1>
+                    <button type="button" class="btn-close" @onclick="HideModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body @BodyClasses">
+                    @Body
+                </div>
+                <div class="modal-footer @FooterClasses">
+                    <button type="button" class="btn btn-danger" @onclick="HideModal">@CancelButtonText</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string HeaderClasses { get; set; } = string.Empty;
+    [Parameter] public string BodyClasses { get; set; } = string.Empty;
+    [Parameter] public string FooterClasses { get; set; } = string.Empty;
+    [Parameter] public string SaveButtonText { get; set; } = "Save changes";
+    [Parameter] public string CancelButtonText { get; set; } = "Close";
+    [Parameter] public bool ShowModal { get; set; } = false;
+    [Parameter] public EventCallback<bool> ShowModalChanged { get; set; }
+    [Parameter] public EventCallback<bool> SaveClicked { get; set; }
+    [Parameter] public RenderFragment Body { get; set; }
+
+    private void HideModal()
+    {
+        ShowModal = false;
+        ShowModalChanged.InvokeAsync(ShowModal);
+    }
+
+    private async Task SaveChanges()
+    {
+        ShowModal = false;
+        await ShowModalChanged.InvokeAsync(ShowModal);
+        await SaveClicked.InvokeAsync(true);
+    }
+}
+
+
+
+@* Example *@
+
+@* 
+<button type="button" class="btn btn-primary" @onclick="ShowModal">
+    Launch demo modal
+</button>
+
+<LabModal ShowModal="@showModal"
+          ShowModalChanged="HandleShowModalChanged"
+          SaveClicked="HandleSaveClicked"
+          Title="This is modal title"
+          HeaderClasses="border-0"
+          FooterClasses="border-0">
+    <Body>
+        <p>This is the modal body. You can add anything you want.</p>
+    </Body>
+</LabModal>
+<p>@saveClicked</p>
+@code {
+    private bool showModal = false;
+    private bool saveClicked = false;
+
+    private void ShowModal()
+    {
+        showModal = true;
+    }
+
+    private void HandleShowModalChanged(bool newValue)
+    {
+        showModal = newValue;
+    }
+
+    private void HandleSaveClicked(bool value)
+    {
+        saveClicked = value;
+        // Handle the save button click event here
+        // You can perform additional actions or update the UI as needed
+    }
+} *@

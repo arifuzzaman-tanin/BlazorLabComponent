@@ -1,0 +1,56 @@
+@code {
+    [Parameter] public string Value { get; set; }
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string Help { get; set; } = string.Empty;
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public bool IsRequired { get; set; } = false;
+    [Parameter] public string Classes { get; set; } = string.Empty;
+}
+@if (!string.IsNullOrEmpty(Label))
+{
+    <label class="form-label fw-bold">
+        @Label
+        @if (IsRequired)
+        {
+            <span class="text-danger">*</span>
+        }
+    </label>
+}
+
+<input class="form-control @Classes" type="@Type" @bind="Value" placeholder="@Placeholder" @oninput="OnInput" />
+
+@if (!string.IsNullOrEmpty(Help))
+{
+    <div class="form-text">
+        @Help
+    </div>
+}
+
+@code {
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        Value = e.Value.ToString();
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
+
+
+
+@* Example *@
+
+@* <InputBox @bind-Value="exampleValue"
+          Placeholder="Enter your email"
+          Type="email"
+          Label="Email"
+          Help="example@outlook.com"
+          IsRequired="true" />
+
+
+<p class="mt-5">Your name is: @exampleValue</p>
+
+@code {
+    private string exampleValue;
+}
+ *@

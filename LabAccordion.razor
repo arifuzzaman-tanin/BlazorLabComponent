@@ -1,0 +1,77 @@
+<div class="accordion @AccordionClasses" id="@AccordionId">
+    @foreach (var accordionItem in Accordions)
+    {
+        var collapseId = GetAccordionId(accordionItem);
+        <div class="accordion-item @AccordionItemClasses">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed @AccordionTitleClasses" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="true" aria-controls="@collapseId">
+                    @accordionItem.Title
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" data-bs-parent="#@AccordionId">
+                <div class="accordion-body @AccordionBodyClasses">
+                    @accordionItem.ContentText
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public IEnumerable<ExpandablePanel> Accordions { get; set; }
+    [Parameter] public string AccordionClasses { get; set; } = string.Empty;
+    [Parameter] public string AccordionItemClasses { get; set; } = string.Empty;
+    [Parameter] public string AccordionTitleClasses { get; set; } = string.Empty;
+    [Parameter] public string AccordionBodyClasses { get; set; } = string.Empty;
+
+    private string AccordionId;
+
+    protected override Task OnInitializedAsync()
+    {
+        AccordionId = GenerateAccordionId();
+        return base.OnInitializedAsync();
+    }
+
+    private string GetAccordionId(ExpandablePanel accordionItem)
+    {
+        return $"accordionCollapse_{Guid.NewGuid():N}";
+    }
+
+    private string GenerateAccordionId()
+    {
+        return $"accordionContainer_{Guid.NewGuid():N}";
+    }
+
+    public class ExpandablePanel
+    {
+        public string Title { get; set; }
+        public string ContentText { get; set; }
+    }
+}
+
+
+@* Example *@
+
+@* <LabAccordion Accordions="accordions" />
+
+@code {
+    private IEnumerable<ExpandablePanel> accordions;
+
+    protected override Task OnInitializedAsync()
+    {
+        accordions = new List<ExpandablePanel>()
+        {
+            new ExpandablePanel
+            {
+                Title = "Introduction to Programming",
+                ContentText = "Explore the fundamentals of programming, including variables, loops, and functions. Get started on your coding journey today!"
+            },
+            new ExpandablePanel
+            {
+                Title = "Web Development Basics",
+                ContentText = "Learn the essentials of web development, covering HTML, CSS, and JavaScript. Build your first website and enhance your skills."
+            }
+        };
+        return base.OnInitializedAsync();
+    }
+} *@

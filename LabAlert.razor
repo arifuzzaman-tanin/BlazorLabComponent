@@ -1,0 +1,20 @@
+<div class="alert @Classes" role="alert">
+    @Text
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; } = string.Empty;
+    [Parameter] public string Classes { get; set; } = string.Empty;
+}
+
+
+@* Example *@
+
+@* <LabAlert Classes="alert-primary" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-secondary" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-success" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-danger" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-warning" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-info" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-light" Text="A simple primary alert—check it out!" />
+<LabAlert Classes="alert-dark" Text="A simple primary alert—check it out!" /> *@

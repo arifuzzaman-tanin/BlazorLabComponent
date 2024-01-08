@@ -1,0 +1,74 @@
+<div class="form-check @formCheckSwitch">
+    <input class="form-check-input @Classes" type="@inputType" @bind="IsChecked" @oninput="OnCheckboxChanged" checked="@IsChecked" name="@Name" disabled="@IsDisabled">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="form-check-label">
+            @Label
+        </label>
+    }
+
+    @if (!string.IsNullOrEmpty(Help))
+    {
+        <div class="form-text">
+            @Help
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string Help { get; set; } = string.Empty;
+    [Parameter] public string Name { get; set; } = string.Empty;
+    [Parameter] public string Type { get; set; } = CheckboxType.Checkbox;
+    [Parameter] public bool IsDisabled { get; set; } = false;
+    [Parameter] public string Classes { get; set; } = string.Empty;
+    [Parameter] public bool IsChecked { get; set; } = false;
+
+    private string formCheckSwitch = string.Empty;
+    private string inputType = string.Empty;
+
+    private async Task OnCheckboxChanged(ChangeEventArgs e)
+    {
+        IsChecked = (bool)e.Value;
+        await IsCheckedChanged.InvokeAsync(IsChecked);
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SetCheckboxType();
+        return base.OnInitializedAsync();
+    }
+
+    private void SetCheckboxType()
+    {
+        if (Type == CheckboxType.Switch)
+        {
+            formCheckSwitch = "form-switch";
+            inputType = CheckboxType.Checkbox;
+        }
+        else if (Type == CheckboxType.Checkbox)
+        {
+            inputType = CheckboxType.Checkbox;
+        }
+    }
+
+    private static class CheckboxType
+    {
+        public static string Checkbox => "checkbox";
+        public static string Switch => "switch";
+    }
+}
+
+
+@* Example *@
+
+@* <LabCheckbox Type="checkbox" Label="Terms and condition" @bind-IsChecked="featureEnabled" />
+<LabCheckbox Type="switch" Label="Terms and condition" @bind-IsChecked="featureEnabled" />
+
+<p>Feature is @(featureEnabled ? "enabled" : "disabled").</p>
+<p>@featureEnabled</p>
+
+@code {
+    private bool featureEnabled = false;
+} *@

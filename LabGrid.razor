@@ -1,0 +1,154 @@
+@if (Columns != null && Columns.Count > 0)
+{
+    <div class="row">
+        <div class="col-sm-3">
+            <input @bind="searchTerm" placeholder="Search" @onkeyup="Search" class="form-control mb-2 @SearchBoxClasses" />
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table @GridClasses">
+            <thead>
+                <tr>
+                    @foreach (var column in Columns)
+                    {
+                        <th>@column.Header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in displayedData)
+                {
+                    <tr>
+                        @foreach (var column in Columns)
+                        {
+                            <td>@column.GetValue(row)</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <button disabled="@(currentPage <= 1)" class="page-link @(currentPage <= 1 ? "text-dark" : "text-primary")" @onclick="(() => ChangePage(-1))">Previous</button>
+            </li>
+            <li class="page-item">
+                <button disabled="@(currentPage >= totalPages)" class="page-link @(currentPage >= totalPages ? "text-dark" : "text-primary")" @onclick="(() => ChangePage(1))">Next</button>
+            </li>
+        </ul>
+    </nav>
+}
+else
+{
+    <div class="card">
+        <div class="card-body text-center bg-light">
+            <i class="bi bi-box-seam"></i> No Records Found
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public List<object> Data { get; set; }
+    [Parameter] public string GridClasses { get; set; } = string.Empty;
+    [Parameter] public string Classes { get; set; } = string.Empty;
+    [Parameter] public string SearchBoxClasses { get; set; } = string.Empty;
+
+    private List<object> tempData = new List<object>();
+    private List<TableColumn> Columns;
+    private List<object> displayedData;
+    private int pageSize = 5;
+    private int currentPage = 1;
+    private int totalPages => (int)Math.Ceiling((double)tempData.Count / pageSize);
+    private string searchTerm = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        tempData = Data;
+        InferColumns();
+        UpdateDisplayedData();
+    }
+
+    private void InferColumns()
+    {
+        var firstObject = Data.FirstOrDefault();
+        Columns = firstObject != null
+            ? firstObject.GetType().GetProperties()
+                .Select(prop => new TableColumn { Header = prop.Name, Field = prop.Name })
+                .ToList()
+            : new List<TableColumn>();
+    }
+
+    private void UpdateDisplayedData()
+    {
+        displayedData = tempData
+            .Where(item =>
+                string.IsNullOrWhiteSpace(searchTerm) ||
+                Columns.Any(column => column.GetValue(item)?.ToString()?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true))
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    private void Search()
+    {
+        displayedData = tempData
+            .Where(item =>
+                string.IsNullOrWhiteSpace(searchTerm) ||
+                Columns.Any(column => column.GetValue(item)?.ToString()?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true))
+            .ToList();
+
+        currentPage = 1;
+        UpdateDisplayedData();
+    }
+
+    private void ChangePage(int page)
+    {
+        currentPage += page;
+        if (currentPage <= 1) currentPage = 1;
+        if (currentPage >= totalPages) currentPage = totalPages;
+        UpdateDisplayedData();
+    }
+
+    public class TableColumn
+    {
+        public string Header { get; set; }
+        public string Field { get; set; }
+
+        public object GetValue(object item)
+        {
+            return item.GetType().GetProperty(Field)?.GetValue(item);
+        }
+    }
+}
+
+@* Example *@
+
+@* <LabGrid Data="@people" GridClasses="table-striped table-hover" />
+
+@code {
+    private List<Object> people = new List<Object>
+    {
+        new Person { Id = 1, Name = "John Doe", Age = 30 },
+        new Person { Id = 2, Name = "Jane Doe", Age = 25 },
+        new Person { Id = 3, Name = "user123 Doe", Age = 28 },
+        new Person { Id = 4, Name = "coolguy Doe", Age = 22 },
+        new Person { Id = 5, Name = "soccerfan Doe", Age = 24 },
+        new Person { Id = 6, Name = "booklover Doe", Age = 29 },
+        new Person { Id = 7, Name = "musicgirl Doe", Age = 27 },
+        new Person { Id = 8, Name = "techwizard Doe", Age = 31 },
+        new Person { Id = 9, Name = "adventureseeker Doe", Age = 26 },
+        new Person { Id = 10, Name = "fitnessfreak Doe", Age = 32 },
+        new Person { Id = 11, Name = "codingmaster Doe", Age = 28 },
+        new Person { Id = 12, Name = "beachbum Doe", Age = 25 },
+    };
+
+    public class Person
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+} *@

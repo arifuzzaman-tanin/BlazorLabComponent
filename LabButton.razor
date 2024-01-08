@@ -1,0 +1,12 @@
+<button type="button" class="btn @Classes" disabled="@IsDisabled">@Text</button>
+
+@code {
+    [Parameter] public string Type { get; set; } = "button";
+    [Parameter] public string Text { get; set; } = string.Empty;
+    [Parameter] public string Classes { get; set; } = string.Empty;
+    [Parameter] public bool IsDisabled { get; set; } = false;
+}
+
+@* Example *@
+
+@* <LabButton Classes="btn-primary" Text="Click me" /> *@
