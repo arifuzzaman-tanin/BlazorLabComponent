@@ -618,11 +618,6 @@ The `LabModal` component is a reusable Blazor component designed to simplify the
 ### Basic Usage
 
 ```csharp
-@page "/example"
-
-@* ... (other imports, code, etc.) ... *@
-@using YourNamespace.Components
-
 <button type="button" class="btn btn-primary" @onclick="ShowModal">
     Launch demo modal
 </button>
