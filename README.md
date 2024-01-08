@@ -159,6 +159,7 @@ Feel free to customize the component according to your application's styling nee
 
 # LabAccordion Component
 
+<img src="https://raw.githubusercontent.com/arifuzzaman-tanin/BlazorLabComponent/main/images/accordion.png" />
 
 The `LabAccordion` component is a versatile and customizable Blazor component designed to create responsive and interactive accordion-style panels. It is particularly useful for presenting information in a collapsible and organized manner. This documentation provides a detailed overview of the component, its parameters, and usage examples.
 
@@ -832,5 +833,19 @@ The provided `HomeComponent` demonstrates how to use the `SelectBoxComponent` wi
     }
 }
 ```
+
+Feel free to add more details, such as additional features, configuration options, or any other relevant information based on the specifics of your component and your project's needs. Additionally, include a proper license file and credit contributors appropriately.
+
+<br/><br/>
+
+## Contributors
+
+- <a href="https://github.com/arifuzzaman-tanin">Md Arifuzzaman Tanin (Author)</a>
+
+## License
+
+This project is licensed under the MIT License. Feel free to modify and use it in your projects.
+
+---
 
 Feel free to add more details, such as additional features, configuration options, or any other relevant information based on the specifics of your component and your project's needs. Additionally, include a proper license file and credit contributors appropriately.
