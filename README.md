@@ -618,7 +618,7 @@ You can apply custom styling by utilizing the `Classes` parameter, allowing seam
 
 <br/><br/>
 
-# LabModal Component Readme
+# LabModal Component
 
 <img src="https://raw.githubusercontent.com/arifuzzaman-tanin/BlazorLabComponent/main/images/modal.png" />
 
